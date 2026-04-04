@@ -52,7 +52,7 @@ if (isset($_SESSION['username'])) {
                                 while($row = mysqli_fetch_assoc($result)){
                                     session_start();
                                     $_SESSION['username'] = $row['username'];
-                                    $_SESSION['user_id'] = $row['userP_id'];
+                                    $_SESSION['user_id'] = $row['user_id'];
                                     $_SESSION['role'] = $row['role'];
 
                                     header('Location: post.php');
