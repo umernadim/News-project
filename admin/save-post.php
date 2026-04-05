@@ -9,11 +9,9 @@ if (isset($_FILES['fileToUpload'])) {
     $file_tmp  = $_FILES['fileToUpload']['tmp_name'];
     $file_type = $_FILES['fileToUpload']['type'];
 
-    // extension nikalne ka sahi tareeqa
     $temp = explode('.', $file_name);
     $file_ext = strtolower(end($temp));
 
-    // sahi extensions
     $extensions = array("jpeg", "jpg", "png");
 
     if (in_array($file_ext, $extensions) === false) {
@@ -25,14 +23,13 @@ if (isset($_FILES['fileToUpload'])) {
     }
 
     if (empty($errors)) {
-        // unique file name generate karna best practice hai
         $new_name = md5(time() . $file_name) . "." . $file_ext;
         $file_name = $new_name;
 
         move_uploaded_file($file_tmp, "upload/" . $file_name);
     } else {
         print_r($errors);
-        exit(); // agar error hai to aage query run na ho
+        exit();
     }
 }
 

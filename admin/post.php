@@ -20,12 +20,12 @@
                 $offset = ($page - 1) * $limit;
 
                 if ($_SESSION['role'] == '1') {
-                    $sql = "SELECT p.post_id, p.title, p.description, p.post_date ,c.category_name, u.username FROM post AS p
+                    $sql = "SELECT p.post_id, p.title, p.description, p.post_date ,c.category_name, p.category, u.username FROM post AS p
                 INNER JOIN category AS c ON p.category = c.category_id
                 INNER JOIN user AS u ON p.author = u.user_id
                 ORDER BY post_id DESC LIMIT {$offset}, {$limit}";
-                }else if ($_SESSION['role'] == '0') {
-                    $sql = "SELECT p.post_id, p.title, p.description, p.post_date ,c.category_name, u.username FROM post AS p
+                } else if ($_SESSION['role'] == '0') {
+                    $sql = "SELECT p.post_id, p.title, p.description, p.post_date ,c.category_name, p.category, u.username FROM post AS p
                 INNER JOIN category AS c ON p.category = c.category_id
                 INNER JOIN user AS u ON p.author = u.user_id
                 WHERE p.author = {$_SESSION['user_id']}
@@ -53,12 +53,12 @@
                             ?>
                                 <tr>
                                     <td class='id'><?php echo $row['post_id']; ?></td>
-                                    <td><?php echo $row['description']; ?></td>
+                                    <td><?php echo $row['title']; ?></td>
                                     <td><?php echo $row['category_name']; ?></td>
                                     <td><?php echo $row['post_date']; ?></td>
                                     <td><?php echo $row['username']; ?></td>
                                     <td class='edit'><a href='update-post.php?id=<?php echo $row['post_id'] ?>'><i class='fa fa-edit'></i></a></td>
-                                    <td class='delete'><a href='delete-post.php?id=<?php echo $row['post_id'] ?>'><i class='fa fa-trash-o'></i></a></td>
+                                    <td class='delete'><a href='delete-post.php?postid=<?php echo $row['post_id'] ?>&catid=<?php echo $row['category'] ?>'><i class='fa fa-trash-o'></i></a></td>
                                 </tr>
                             <?php } ?>
                         </tbody>
