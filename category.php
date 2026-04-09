@@ -5,8 +5,8 @@
             <div class="col-md-8">
                 <!-- post-container -->
                 <div class="post-container">
-                    <?php 
-                     $sql1 = "SELECT * FROM category WHERE category_id= {$cat_id}";
+                    <?php
+                    $sql1 = "SELECT * FROM category WHERE category_id= {$cat_id}";
                     $result1 = mysqli_query($connect, $sql1);
                     $row1 = mysqli_fetch_assoc($result1);
                     ?>
@@ -22,7 +22,7 @@
                     $limit = 3;
                     $offset = ($page - 1) * $limit;
 
-                    $sql = "SELECT p.post_id, p.title, p.description, p.post_date ,c.category_name, p.post_img, p.category, u.username FROM post AS p
+                    $sql = "SELECT p.post_id, p.title, p.author, p.description, p.post_date ,c.category_name, p.post_img, p.category, u.username FROM post AS p
                 INNER JOIN category AS c ON p.category = c.category_id
                 INNER JOIN user AS u ON p.author = u.user_id
                 WHERE p.category = {$cat_id}
@@ -42,11 +42,13 @@
                                             <div class="post-information">
                                                 <span>
                                                     <i class="fa fa-tags" aria-hidden="true"></i>
-                                                   <a href='category.php?cid=<?php echo $row['category'] ?>'><?php echo $row['category_name'] ?></a>
+                                                    <a href='category.php?cid=<?php echo $row['category'] ?>'><?php echo $row['category_name'] ?></a>
                                                 </span>
                                                 <span>
                                                     <i class="fa fa-user" aria-hidden="true"></i>
-                                                    <a href='author.php'><?php echo $row['username'] ?></a>
+                                                    <a href='author.php?aid=<?php echo $row['author']; ?>'>
+                                                <?php echo $row['username']; ?>
+                                            </a>
                                                 </span>
                                                 <span>
                                                     <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -65,14 +67,14 @@
                     } else {
                         echo "<h2>No record found.</h2>";
                     }
-                   
+
                     if (mysqli_num_rows($result1) > 0) {
                         $total_records = $row1['post'];
                         $total_page = ceil($total_records / $limit);
 
                         echo "<ul class='pagination admin-pagination'>";
                         if ($page > 1) {
-                            echo '<li><a href="index.php?cid='.$cat_id.'&page=' . ($page - 1) . '">Prev</a></li>';
+                            echo '<li><a href="index.php?cid=' . $cat_id . '&page=' . ($page - 1) . '">Prev</a></li>';
                         }
                         for ($i = 1; $i <= $total_page; $i++) {
                             if ($i == $page) {
@@ -80,10 +82,10 @@
                             } else {
                                 $active = "";
                             }
-                            echo '<li class="' . $active . '"><a href="index.php?cid='.$cat_id.'&page=' . $i . '">' . $i . '</a></li>';
+                            echo '<li class="' . $active . '"><a href="index.php?cid=' . $cat_id . '&page=' . $i . '">' . $i . '</a></li>';
                         }
                         if ($total_page > $page) {
-                            echo '<li><a href="index.php?cid='.$cat_id.'&page=' . ($page + 1) . '">Next</a></li>';
+                            echo '<li><a href="index.php?cid=' . $cat_id . '&page=' . ($page + 1) . '">Next</a></li>';
                         }
                         echo "</ul>";
                     }
