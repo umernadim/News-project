@@ -1,7 +1,8 @@
 <?php 
 include 'config.php';
+
 if(empty($_FILES['new-image']['name'])){
-    $image = $_POST['old_image'];
+    $file_name = $_POST['old_image'];   // FIXED
 }else{
     $errors = array();
 
@@ -34,12 +35,24 @@ if(empty($_FILES['new-image']['name'])){
     }
 }
 
-$sql = "UPDATE post SET title = '{$_POST["post_title"]}', description = '{$_POST["postdesc"]}', category={$_POST["category"]},post_img = '{$file_name}'
-WHERE post_id = {$_POST["post_id"]}";
+// Escape inputs
+$title    = mysqli_real_escape_string($connect, $_POST["post_title"]);
+$desc     = mysqli_real_escape_string($connect, $_POST["postdesc"]);
+$category = (int)$_POST["category"];
+$post_id  = (int)$_POST["post_id"];
 
-$result = mysqli_query($connect, $sql);
+$sql = "UPDATE post 
+        SET title = '{$title}', description = '{$desc}', category = {$category}, post_img = '{$file_name}'
+        WHERE post_id = {$post_id};";
+
+if($_POST['old_category'] != $_POST['category']){
+    $old_cat = (int)$_POST['old_category'];
+    $sql .= "UPDATE category SET post = post - 1 WHERE category_id = {$old_cat};";
+    $sql .= "UPDATE category SET post = post + 1 WHERE category_id = {$category};";
+}
+
+$result = mysqli_multi_query($connect, $sql);
 if($result){
     header("Location: post.php");
 }
-
 ?>

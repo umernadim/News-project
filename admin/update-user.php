@@ -19,12 +19,10 @@ if(isset($_POST['submit'])){
         if($result){
             header('Location: users.php');
         }
-    
 }
 
 ?>
 
-?>
 <div id="admin-content">
     <div class="container">
         <div class="row">
